@@ -1,0 +1,5 @@
+<h1>Your hosted events</h1>
+
+<% @user.hosted_events.each do |hosted_event| %>
+    <%= hosted_event.title %>
+<% end %>
