@@ -1,5 +1,15 @@
-<h1>Your hosted events</h1>
+<%= render "users/hosted_events"%>
 
-<% @user.hosted_events.each do |hosted_event| %>
-    <%= hosted_event.title %>
+
+<% invitation = @user.enrollments.where(:status => 0)%>
+<% if !invitation.empty? %>
+    <%= render "users/attended_events", head: "Invited Events", status: 0 %>
 <% end %>
+<% if !@user.attended_events.empty? %>
+    <%= render "users/attended_events", head: "joined Events", status: 1 %>
+<% end %>
+
+<% if !@user.attended_events.empty? %>
+    <%= render "users/past_events" %>
+<% end %>
+

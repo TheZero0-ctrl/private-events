@@ -1,7 +1,39 @@
+<div class="flex justify-center m-[20px]">
+  <div class="block rounded-lg shadow-lg bg-white w-[90%] text-center">
+    <div class="py-3 px-6 border-b border-gray-300">
+      Created by: <%= @event.host.username %>
+    </div>
+    <div class="p-6">
+      <h5 class="text-gray-900 text-xl font-medium mb-2"><%= @event.title %></h5>
+      <p class="text-gray-700 text-base mb-4">
+        <%= @event.description %>
+      </p>
+      <div class="flex justify-center">
+        <% if user_signed_in? %>
+          <% if @event.host == current_user %>
+            <%= link_to "Invite", list_users_path(:event_id => @event.id), method: :post, class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-[50%]"%>
+          <% else %>
+              <% if @event.anttendees.include?(current_user) %>
+                <% enrollment = current_user.enrollments.find_by!(:event_id => @event.id)%>
+                <% if enrollment.status == 0 %>
+                  <%= link_to "Join", enrollment_path(:event_id => @event.id, :status => 0), method: :put, class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-[50%]"%>
+                <% else %>
+                  <%= link_to "Leave",enrollment_path(:event_id => @event.id, :id => enrollment.id), method: :delete,class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-[50%]"%>
+                <% end %>
+              <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="py-3 px-6 border-t border-gray-300 text-gray-600">
+      Event Date: <%= @event.event_date %>
+    </div>
+    <div class="py-3 px-6 text-gray-600">
+      Location: <%= @event.location %>
+    </div>
+  </div>
+</div>
+
 <div>
-    <h1><%= @event.title %></h1>
-    <p><%= @event.description %></p>
-    <p><%= @event.location %></p>
-    <p><%= @event.event_date %></p>
-    <p>created by <%= @event.host.username %></p>
+    <%= render "events/attendees" %>
 </div>

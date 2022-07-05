@@ -1,0 +1,46 @@
+<div class="p-4 w-[50%] bg-white rounded-lg border shadow-md sm:p-8 mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h5 class="text-xl font-bold leading-none text-gray-900">Users</h5>
+            
+    </div>
+    <div class="flow-root">
+            <ul role="list" class="divide-y divide-gray-400">
+                <% @users.each do |anttende| %>
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <% if anttende != current_user %>
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        <%= anttende.username %>
+                                    </p>
+                                    <p class="text-sm text-gray-500 truncate">
+                                        <%= anttende.email %>
+                                    </p>
+                                <% end %>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 gap-[10px]">
+                                <% if @event.anttendees.include?(anttende)%>
+                                    <% enrollment = anttende.enrollments.find_by!(:event_id => @event.id)%>
+                                    <% if enrollment.status == 1 %>
+                                        <div>comming to event</div>
+                                        <%if current_user == @event.host %>
+                                            <div><%= link_to "remove",enrollment_path(:event_id => @event.id, :id => enrollment.id), method: :delete,class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"%></div>
+                                        <% end %>
+                                    <% elsif enrollment.status == 0 %>
+                                        <div>Yet to accept</div>
+                                            <% if current_user == @event.host %>
+                                                <div><%= link_to "Cancel",enrollment_path(:event_id => @event.id, :id => enrollment.id), method: :delete,class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"%></div>
+                                            <% end %>
+                                    <% end %>
+                                <% else %>
+                                    <% if anttende != current_user %>
+                                        <div><%= link_to "Invite", enrollments_path(:event_id => @event.id, :status => 0, :user_id => anttende.id), method: :post, class: "px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"%></div>
+                                    <% end %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </li>
+                <% end %>
+            </ul>
+    </div>
+    </div>

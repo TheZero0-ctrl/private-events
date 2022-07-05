@@ -1,6 +1,8 @@
-<h1>List of all Events</h1>
-<div>
-    <% @events.each do |event| %>
-    <p><%= event.title %></p>
-    <% end %>
-</div>
+<% if !@events.upcoming.empty? %>
+  <%= render "events/list_of_events", events: @events.upcoming, head: "Upcomming Events" %>
+<% end %>
+
+<% if !@events.past.empty? %>
+   <%= render "events/list_of_events", events: @events.past, head: "Past Events" %>
+<% end %>
+
